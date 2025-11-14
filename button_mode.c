@@ -79,29 +79,29 @@ bool check_capture_button() {
 
 // read the x scale encoder
 int read_encoder_x() {
-    static int last_clk = 0;
+    static int last_clk_x = 0;
     int clk = gpio_get(X_CLK);
     int dt = gpio_get(X_DT);
     int result = 0;
 
-    if (clk != last_clk) {
+    if (clk != last_clk_x) {
         result = (dt != clk) ? 1 : -1;
     }
-    last_clk = clk;
+    last_clk_x = clk;
     return result;
 }
 
 // y scale encoder reading
 int read_encoder_y() {
-    static int last_clk = 0;
+    static int last_clk_y = 0;
     int clk = gpio_get(Y_CLK);
     int dt = gpio_get(Y_DT);
     int result = 0;
 
-    if (clk != last_clk) {
+    if (clk != last_clk_y) {
         result = (dt != clk) ? 1 : -1;
     }
-    last_clk = clk;
+    last_clk_y = clk;
     return result;
 }
 
