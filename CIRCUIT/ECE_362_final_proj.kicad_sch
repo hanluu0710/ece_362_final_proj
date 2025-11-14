@@ -7960,7 +7960,7 @@
 			)
 		)
 	)
-	(global_label "Oscilloscope Input"
+	(global_label "Input"
 		(shape input)
 		(at 27.94 19.05 0)
 		(fields_autoplaced yes)
@@ -7972,7 +7972,7 @@
 		)
 		(uuid "29cdc81b-f17e-43e5-8f2a-ee6ce506163a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 48.705 19.05 0)
+			(at 35.7027 19.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
