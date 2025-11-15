@@ -77,7 +77,7 @@ bool check_capture_button() {
     return false;
 }
 
-// read the x scale encoder 
+// read the x scale encoder
 int read_encoder_x() {
     static int last_clk_x = 0;
     int clk = gpio_get(X_CLK);
@@ -91,17 +91,17 @@ int read_encoder_x() {
     return result;
 }
 
-// y scale encoder reading (seems a bit broken with the reading x, will trynna figure it out)
+// y scale encoder reading
 int read_encoder_y() {
-    static int last_clk_y = 0;
+    static int last_clk = 0;
     int clk = gpio_get(Y_CLK);
     int dt = gpio_get(Y_DT);
     int result = 0;
 
-    if (clk != last_clk_y) {
+    if (clk != last_clk) {
         result = (dt != clk) ? 1 : -1;
     }
-    last_clk_y = clk;
+    last_clk = clk;
     return result;
 }
 
@@ -201,10 +201,11 @@ int main() {
         }
 
         // For the rotary encoder
-        if (read_encoder_x() == 1) {
+        int turn_dir_x = read_encoder_x();
+        if (turn_dir_x == 1) {
             x_scale += x_step;
             printf("X scale increased: %.2f\n", x_scale);
-        } else if (read_encoder_x() == -1) {
+        } else if (turn_dir_x == -1) {
             x_scale -= x_step;
             if (x_scale < 0.1f) {
                 x_scale = 0.1f;
@@ -212,10 +213,11 @@ int main() {
             printf("X scale decreased: %.2f\n", x_scale);
         }
 
-        if (read_encoder_y() == 1) {
+        int turn_dir_y = read_encoder_y();
+        if (turn_dir_y == 1) {
             y_scale += y_step;
             printf("Y scale increased: %.2f\n", y_scale);
-        } else if (read_encoder_y() == -1) {
+        } else if (turn_dir_y == -1) {
             y_scale -= y_step;
             if (y_scale < 0.1f) {
                 y_scale = 0.1f;
