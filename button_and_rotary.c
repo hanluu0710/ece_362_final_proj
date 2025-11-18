@@ -180,12 +180,16 @@ int main() {
     wave_output(current_wave);
     
     // Initializing scaling steps and initial scales
-    float x_scale = 1.0f; 
+    float x_scale = 1.0f;
     float y_scale = 1.0f;
+    float x_offset = 0.0f;
+    float y_offset = 0.0f;
 
-    float x_step = 0.1f;
-    float y_step = 0.1f;
+    float x_step = 0.3f;
+    float y_step = 0.3f;
 
+    bool x_mode = false;   // false for scale, true for shift
+    bool y_mode = false;   // same as above
     // loop functions
 
     while (1) {
@@ -201,39 +205,62 @@ int main() {
         }
 
         // For the rotary encoder
-        int turn_dir_x = read_encoder_x();
-        if (turn_dir_x == 1) {
-            x_scale += x_step;
-            printf("X scale increased: %.2f\n", x_scale);
-        } else if (turn_dir_x == -1) {
-            x_scale -= x_step;
-            if (x_scale < 0.1f) {
-                x_scale = 0.1f;
-            }
-            printf("X scale decreased: %.2f\n", x_scale);
-        }
-
-        int turn_dir_y = read_encoder_y();
-        if (turn_dir_y == 1) {
-            y_scale += y_step;
-            printf("Y scale increased: %.2f\n", y_scale);
-        } else if (turn_dir_y == -1) {
-            y_scale -= y_step;
-            if (y_scale < 0.1f) {
-                y_scale = 0.1f;
-            } 
-            printf("Y scale decreased: %.2f\n", y_scale);
-        }
-
+        // to check mode of the buttons
         if (check_x_button()) {
-            x_step = (x_step == 0.1f) ? 0.5f : 0.1f;
-            printf("X step toggled to %.2f\n", x_step);
+            x_mode = !x_mode;
+            int x_check_mode = x_mode ? "Shift" : "Scale";
+            printf("X mode: %s\n", x_check_mode);
         }
 
         if (check_y_button()) {
-            y_step = (y_step == 0.1f) ? 0.5f : 0.1f;
-            printf("Y step toggled to %.2f\n", y_step);
+            y_mode = !y_mode;
+            int y_check_mode = y_mode ? "Shift" : "Scale";
+            printf("Y mode: %s\n", y_check_mode);
         }
+
+        // check what mode it is and scale or shift accordingly
+        int x_check_turn = read_encoder_x();
+        if (x_check_turn != 0) {
+            if (x_mode) {
+                if (x_check_turn > 0) {
+                    x_offset += x_step;
+                } else {
+                    x_offset -= x_step;
+                }
+                printf("X offset = %.2f\n", x_offset);
+
+            } else {
+                if (x_check_turn > 0) {
+                    x_scale += x_step;
+                } else {
+                    x_scale -= x_step;
+                    if (x_scale < 0.1f) x_scale = 0.1f;
+                }
+                printf("X scale = %.2f\n", x_scale);
+            }
+        }
+
+        int y_check_turn = read_encoder_y();
+        if (y_check_turn != 0) {
+            if (y_mode) {
+                if (y_check_turn > 0) {
+                    y_offset += y_step;
+                } else {
+                    y_offset -= y_step;
+                }
+                printf("Y OFFSET = %.2f\n", y_offset);
+                
+            } else {
+                if (y_check_turn > 0) {
+                    y_scale += y_step;
+                } else {
+                    y_scale -= y_step;
+                    if (y_scale < 0.1f) y_scale = 0.1f;
+                }
+                printf("Y SCALE = %.2f\n", y_scale);
+            }
+        }
+
         sleep_ms(10);
     }
 }
