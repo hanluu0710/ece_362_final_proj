@@ -8663,7 +8663,7 @@
 	(segment
 		(start 3.04 7.11)
 		(end 7.35 7.11)
-		(width 0.2)
+		(width 0.5)
 		(layer "F.Cu")
 		(net 1)
 		(uuid "19463643-8c55-4560-aa73-30e37395c275")
@@ -8719,7 +8719,7 @@
 	(segment
 		(start 1.17 8.98)
 		(end 3.04 7.11)
-		(width 0.2)
+		(width 0.5)
 		(layer "F.Cu")
 		(net 1)
 		(uuid "90ced3ff-fe04-49da-896b-143b80b9a2b1")
