@@ -248,7 +248,7 @@ int main() {
                 } else {
                     y_offset -= y_step;
                 }
-                printf("Y OFFSET = %.2f\n", y_offset);
+                printf("Y offset = %.2f\n", y_offset);
                 
             } else {
                 if (y_check_turn > 0) {
@@ -257,7 +257,7 @@ int main() {
                     y_scale -= y_step;
                     if (y_scale < 0.1f) y_scale = 0.1f;
                 }
-                printf("Y SCALE = %.2f\n", y_scale);
+                printf("Y scale = %.2f\n", y_scale);
             }
         }
 
