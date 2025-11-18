@@ -270,7 +270,7 @@
 			(pin input line
 				(at 36.83 5.08 180)
 				(length 2.54)
-				(name ""
+				(name "SD"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -288,7 +288,7 @@
 			(pin input line
 				(at 36.83 2.54 180)
 				(length 2.54)
-				(name ""
+				(name "SD"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -306,7 +306,7 @@
 			(pin input line
 				(at 36.83 0 180)
 				(length 2.54)
-				(name ""
+				(name "SD"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -324,7 +324,7 @@
 			(pin input line
 				(at 36.83 -2.54 180)
 				(length 2.54)
-				(name ""
+				(name "SD"
 					(effects
 						(font
 							(size 1.27 1.27)
@@ -342,7 +342,7 @@
 			(pin input line
 				(at 36.83 -5.08 180)
 				(length 2.54)
-				(name ""
+				(name "SD"
 					(effects
 						(font
 							(size 1.27 1.27)

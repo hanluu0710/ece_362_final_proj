@@ -20,7 +20,7 @@
 // all the image frames into the uploaded 
 // binary!  Expect to wait 5 minutes.
 //#define ANIMATION
-//#define PROJECT
+#define PROJECT
 /****************************************** */
 #ifdef PROJECT
 void run_oscilloscope();
@@ -249,7 +249,7 @@ int main() {
     }
 
 
-    float get_sample(float t) {
+    float get_sample(float i) {
         // SAMPLE SIGNAL
         // You can replace this with ADC input later.
         return 0.5f * sinf(2 * 3.14159f * 2.0f * t)   // 2 Hz wave
