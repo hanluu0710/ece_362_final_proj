@@ -172,7 +172,7 @@ int main() {
     //     // Slow it WAY down so we can see the planets interact with each other!
     //     sleep_ms(1);
     // }
-    // #endif
+    #endif
     
     /*
         Now, for some more fun!
@@ -233,27 +233,46 @@ int main() {
         // Clear the screen
         LCD_Clear(BACKGROUND);
 
-        // Vertical grid every 20 pixels
-        for (int x = 0; x < LCD_W; x += 20) {
-            for (int y = 0; y < LCD_H; y++) {
-                LCD_DrawPoint(x, y, GRID_COLOR);
-            }
-        }
+    //     // Vertical grid every 20 pixels
+    //     for (int x = 0; x < LCD_W; x += 20) {
+    //         for (int y = 0; y < LCD_H; y++) {
+    //             LCD_DrawPoint(x, y, GRID_COLOR);
+    //         }
+    //     }
 
-        // Horizontal grid every 20 pixels
-        for (int y = 0; y < LCD_H; y += 20) {
-            for (int x = 0; x < LCD_W; x++) {
-                LCD_DrawPoint(x, y, GRID_COLOR);
-            }
+    //     // Horizontal grid every 20 pixels
+    //     for (int y = 0; y < LCD_H; y += 20) {
+    //         for (int x = 0; x < LCD_W; x++) {
+    //             LCD_DrawPoint(x, y, GRID_COLOR);
+    //         }
+    //     }
+    for (int x = 20; x < LCD_W; x += 20) {
+        for (int y = 20; y < LCD_H-20; y++) {
+            LCD_DrawPoint(x, y, GRID_COLOR);
         }
     }
 
+    // Horizontal grid every 20 pixels
+    for (int y = 0; y < LCD_H; y += 20) {
+        for (int x = 0; x < LCD_W; x++) {
+            LCD_DrawPoint(x, y, GRID_COLOR);
+        }
+    }
+    char *vDIV = "1V/DIV";
+    LCD_DrawString(20, 5, 0xF800, 0x0000, vDIV, 12,1); //"1V/DIV"
 
-    float get_sample(float i) {
+    char *sDIV = "1s/DIV";
+    LCD_DrawString(100, 5, 0xF800, 0x0000, sDIV, 12,1); //"1V/DIV"
+
+    char *timeScale = "Tscale";
+    LCD_DrawString(20, LCD_H-15, 0xF800, 0x0000, timeScale, 12,1); //"1V/DIV"
+    }
+    
+
+    float get_sample(float t) {
         // SAMPLE SIGNAL
         // You can replace this with ADC input later.
-        return 0.5f * sinf(2 * 3.14159f * 2.0f * t)   // 2 Hz wave
-            + 0.25f * sinf(2 * 3.14159f * 10.0f * t) // 10 Hz wave
+        return 0.5f * 7   // 2 Hz wave
             ;
     }
 
@@ -273,14 +292,14 @@ int main() {
 
             // Convert voltage to pixel height
             // v ∈ [-1,1] → y ∈ [0,319]
-            int y = (int)((1.0f - v) * (LCD_H / 2));
+            int y = (int)((1.0f - v) * ((LCD_H) / 2));
 
             // Draw trace point
             LCD_DrawPoint(x, y, TRACE_COLOR);
 
             // Erase behind the point (scrolling effect)
-            int old_x = (x + 1) % LCD_W;
-            for (int yy = 0; yy < LCD_H; yy++) {
+            int old_x = (x + 1) % (LCD_W);
+            for (int yy = 21; yy < (LCD_H-20); yy++) {
                 LCD_DrawPoint(old_x, yy, BACKGROUND);
             }
 
@@ -290,8 +309,8 @@ int main() {
 
             // Move x coordinate
             x++;
-            if (x >= LCD_W) {
-                x = 0;
+            if (x >= (LCD_W)) {
+                x = 21;
             }
 
             sleep_ms(1);
