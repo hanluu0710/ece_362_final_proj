@@ -12,10 +12,13 @@ project(ece_362_final_proj C CXX ASM)
 pico_sdk_init()
 
 # Create executable
-add_executable(ece_362_final_proj display.c)
+add_executable(
+    src/main.c
+    src/adc.c
+)
 
 # Link libraries
-target_link_libraries(ece_362_final_proj pico_stdlib hardware_spi hardware_gpio)
+target_link_libraries(ece_362_final_proj pico_stdlib hardware_spi hardware_gpio main)
 
 # Create additional build outputs (UF2, BIN, etc.)
 pico_add_extra_outputs(ece_362_final_proj)

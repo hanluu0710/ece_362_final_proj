@@ -15,7 +15,7 @@
 ########################
 
 //Value Computed by CMake.
-CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=C:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ECE_362_final_project_display/ece_362_final_proj/build/CMakeFiles/pkgRedirects
+CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=C:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ece_362_final_proj/CODE/build/CMakeFiles/pkgRedirects
 
 //Program used to build from makefiles.
 CMAKE_MAKE_PROGRAM:STRING=nmake
@@ -36,13 +36,13 @@ CMAKE_PROJECT_NAME:STATIC=ece_362_final_proj
 CMAKE_PROJECT_SPDX_LICENSE:STATIC=
 
 //Value Computed by CMake
-ece_362_final_proj_BINARY_DIR:STATIC=C:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ECE_362_final_project_display/ece_362_final_proj/build
+ece_362_final_proj_BINARY_DIR:STATIC=C:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ece_362_final_proj/CODE/build
 
 //Value Computed by CMake
 ece_362_final_proj_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-ece_362_final_proj_SOURCE_DIR:STATIC=C:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ECE_362_final_project_display/ece_362_final_proj
+ece_362_final_proj_SOURCE_DIR:STATIC=C:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ece_362_final_proj/CODE
 
 
 ########################
@@ -50,7 +50,7 @@ ece_362_final_proj_SOURCE_DIR:STATIC=C:/Users/luumy/OneDrive/Documents/Fall 2025
 ########################
 
 //This is the directory where this CMakeCache.txt was created
-CMAKE_CACHEFILE_DIR:INTERNAL=c:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ECE_362_final_project_display/ece_362_final_proj/build
+CMAKE_CACHEFILE_DIR:INTERNAL=c:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ece_362_final_proj/CODE/build
 //Major version of cmake used to create the current loaded cache
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=4
 //Minor version of cmake used to create the current loaded cache
@@ -77,7 +77,7 @@ CMAKE_GENERATOR_PLATFORM:INTERNAL=
 CMAKE_GENERATOR_TOOLSET:INTERNAL=
 //Source directory with the top level CMakeLists.txt file for this
 // project
-CMAKE_HOME_DIRECTORY:INTERNAL=C:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ECE_362_final_project_display/ece_362_final_proj
+CMAKE_HOME_DIRECTORY:INTERNAL=C:/Users/luumy/OneDrive/Documents/Fall 2025-2026/ECE_362/ece_362_final_proj/CODE
 //Name of CMakeLists files to read
 CMAKE_LIST_FILE_NAME:INTERNAL=CMakeLists.txt
 //ADVANCED property for variable: CMAKE_MAKE_PROGRAM

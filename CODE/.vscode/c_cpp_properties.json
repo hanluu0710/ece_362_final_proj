@@ -8,10 +8,10 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ECE_362_final_project/ece_362_final_proj/include",
-                "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ECE_362_final_project/ece_362_final_proj/src",
+                "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ece_362_final_proj/CODE/include",
+                "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ece_362_final_proj/CODE/src",
                 "C:/Users/luumy/.platformio/packages/framework-picosdk/generated",
-                "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ECE_362_final_project/ece_362_final_proj/.pio/build/proton/generated",
+                "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ece_362_final_proj/CODE/.pio/build/proton/generated",
                 "C:/Users/luumy/.platformio/packages/framework-picosdk/src/boards/include",
                 "C:/Users/luumy/.platformio/packages/framework-picosdk/src/common/boot_picobin_headers/include",
                 "C:/Users/luumy/.platformio/packages/framework-picosdk/src/common/boot_picoboot_headers/include",
@@ -178,10 +178,10 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ECE_362_final_project/ece_362_final_proj/include",
-                    "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ECE_362_final_project/ece_362_final_proj/src",
+                    "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ece_362_final_proj/CODE/include",
+                    "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ece_362_final_proj/CODE/src",
                     "C:/Users/luumy/.platformio/packages/framework-picosdk/generated",
-                    "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ECE_362_final_project/ece_362_final_proj/.pio/build/proton/generated",
+                    "C:/Users/luumy/Documents/Fall_2025-2026/ECE_362/ece_362_final_proj/CODE/.pio/build/proton/generated",
                     "C:/Users/luumy/.platformio/packages/framework-picosdk/src/boards/include",
                     "C:/Users/luumy/.platformio/packages/framework-picosdk/src/common/boot_picobin_headers/include",
                     "C:/Users/luumy/.platformio/packages/framework-picosdk/src/common/boot_picoboot_headers/include",

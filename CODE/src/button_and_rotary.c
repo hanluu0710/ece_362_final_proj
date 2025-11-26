@@ -137,130 +137,130 @@ bool check_y_button() {
 
 // =========================================================== //
 
-int main() {
-    stdio_init_all();
+// int main() {
+//     stdio_init_all();
 
-    // Initializing BUTTON_MODE
-    gpio_init(BUTTON_MODE);
-    gpio_set_dir(BUTTON_MODE, false);
+//     // Initializing BUTTON_MODE
+//     gpio_init(BUTTON_MODE);
+//     gpio_set_dir(BUTTON_MODE, false);
 
-    // Initializing BUTTON_CAPTURE
-    gpio_init(BUTTON_CAPTURE);
-    gpio_set_dir(BUTTON_CAPTURE, false); 
+//     // Initializing BUTTON_CAPTURE
+//     gpio_init(BUTTON_CAPTURE);
+//     gpio_set_dir(BUTTON_CAPTURE, false); 
 
-    // Initializing X encoder
-    gpio_init(X_CLK); 
-    gpio_set_dir(X_CLK, GPIO_IN);
-    gpio_pull_up(X_CLK);
+//     // Initializing X encoder
+//     gpio_init(X_CLK); 
+//     gpio_set_dir(X_CLK, GPIO_IN);
+//     gpio_pull_up(X_CLK);
 
-    gpio_init(X_DT);  
-    gpio_set_dir(X_DT, GPIO_IN);
-    gpio_pull_up(X_DT);
+//     gpio_init(X_DT);  
+//     gpio_set_dir(X_DT, GPIO_IN);
+//     gpio_pull_up(X_DT);
 
-    gpio_init(X_SW);  
-    gpio_set_dir(X_SW, GPIO_IN);
-    gpio_pull_up(X_SW);
+//     gpio_init(X_SW);  
+//     gpio_set_dir(X_SW, GPIO_IN);
+//     gpio_pull_up(X_SW);
 
-    // Initializing Y encoder
-    gpio_init(Y_CLK); 
-    gpio_set_dir(Y_CLK, GPIO_IN);
-    gpio_pull_up(Y_CLK);
+//     // Initializing Y encoder
+//     gpio_init(Y_CLK); 
+//     gpio_set_dir(Y_CLK, GPIO_IN);
+//     gpio_pull_up(Y_CLK);
 
-    gpio_init(Y_DT);  
-    gpio_set_dir(Y_DT, GPIO_IN);
-    gpio_pull_up(Y_DT);
+//     gpio_init(Y_DT);  
+//     gpio_set_dir(Y_DT, GPIO_IN);
+//     gpio_pull_up(Y_DT);
 
-    gpio_init(Y_SW);  
-    gpio_set_dir(Y_SW, GPIO_IN);
-    gpio_pull_up(Y_SW);
+//     gpio_init(Y_SW);  
+//     gpio_set_dir(Y_SW, GPIO_IN);
+//     gpio_pull_up(Y_SW);
 
-    printf("Wave Generator Ready\n");
+//     printf("Wave Generator Ready\n");
 
-    wave_type current_wave = WAVE_OFF;
-    wave_output(current_wave);
+//     wave_type current_wave = WAVE_OFF;
+//     wave_output(current_wave);
     
-    // Initializing scaling steps and initial scales
-    float x_scale = 1.0f;
-    float y_scale = 1.0f;
-    float x_offset = 0.0f;
-    float y_offset = 0.0f;
+//     // Initializing scaling steps and initial scales
+//     float x_scale = 1.0f;
+//     float y_scale = 1.0f;
+//     float x_offset = 0.0f;
+//     float y_offset = 0.0f;
 
-    float x_step = 0.3f;
-    float y_step = 0.3f;
+//     float x_step = 0.3f;
+//     float y_step = 0.3f;
 
-    bool x_mode = false;   // false for scale, true for shift
-    bool y_mode = false;   // same as above
-    // loop functions
+//     bool x_mode = false;   // false for scale, true for shift
+//     bool y_mode = false;   // same as above
+//     // loop functions
 
-    while (1) {
-        // For the push buttons
-        if (check_mode_button()) {
-        // if (gpio_get(BUTTON_MODE)) {
-            current_wave = (current_wave + 1) % WAVE_COUNT;
-            wave_output(current_wave);
-        }
+//     while (1) {
+//         // For the push buttons
+//         if (check_mode_button()) {
+//         // if (gpio_get(BUTTON_MODE)) {
+//             current_wave = (current_wave + 1) % WAVE_COUNT;
+//             wave_output(current_wave);
+//         }
 
-        if (check_capture_button()) {
-            printf("Successfully Captured Waveform! :D\n");
-        }
+//         if (check_capture_button()) {
+//             printf("Successfully Captured Waveform! :D\n");
+//         }
 
-        // For the rotary encoder
-        // to check mode of the buttons
-        if (check_x_button()) {
-            x_mode = !x_mode;
-            int x_check_mode = x_mode ? "Shift" : "Scale";
-            printf("X mode: %s\n", x_check_mode);
-        }
+//         // For the rotary encoder
+//         // to check mode of the buttons
+//         if (check_x_button()) {
+//             x_mode = !x_mode;
+//             int x_check_mode = x_mode ? "Shift" : "Scale";
+//             printf("X mode: %s\n", x_check_mode);
+//         }
 
-        if (check_y_button()) {
-            y_mode = !y_mode;
-            int y_check_mode = y_mode ? "Shift" : "Scale";
-            printf("Y mode: %s\n", y_check_mode);
-        }
+//         if (check_y_button()) {
+//             y_mode = !y_mode;
+//             int y_check_mode = y_mode ? "Shift" : "Scale";
+//             printf("Y mode: %s\n", y_check_mode);
+//         }
 
-        // check what mode it is and scale or shift accordingly
-        int x_check_turn = read_encoder_x();
-        if (x_check_turn != 0) {
-            if (x_mode) {
-                if (x_check_turn > 0) {
-                    x_offset += x_step;
-                } else {
-                    x_offset -= x_step;
-                }
-                printf("X offset = %.2f\n", x_offset);
+//         // check what mode it is and scale or shift accordingly
+//         int x_check_turn = read_encoder_x();
+//         if (x_check_turn != 0) {
+//             if (x_mode) {
+//                 if (x_check_turn > 0) {
+//                     x_offset += x_step;
+//                 } else {
+//                     x_offset -= x_step;
+//                 }
+//                 printf("X offset = %.2f\n", x_offset);
 
-            } else {
-                if (x_check_turn > 0) {
-                    x_scale += x_step;
-                } else {
-                    x_scale -= x_step;
-                    if (x_scale < 0.1f) x_scale = 0.1f;
-                }
-                printf("X scale = %.2f\n", x_scale);
-            }
-        }
+//             } else {
+//                 if (x_check_turn > 0) {
+//                     x_scale += x_step;
+//                 } else {
+//                     x_scale -= x_step;
+//                     if (x_scale < 0.1f) x_scale = 0.1f;
+//                 }
+//                 printf("X scale = %.2f\n", x_scale);
+//             }
+//         }
 
-        int y_check_turn = read_encoder_y();
-        if (y_check_turn != 0) {
-            if (y_mode) {
-                if (y_check_turn > 0) {
-                    y_offset += y_step;
-                } else {
-                    y_offset -= y_step;
-                }
-                printf("Y offset = %.2f\n", y_offset);
+//         int y_check_turn = read_encoder_y();
+//         if (y_check_turn != 0) {
+//             if (y_mode) {
+//                 if (y_check_turn > 0) {
+//                     y_offset += y_step;
+//                 } else {
+//                     y_offset -= y_step;
+//                 }
+//                 printf("Y offset = %.2f\n", y_offset);
                 
-            } else {
-                if (y_check_turn > 0) {
-                    y_scale += y_step;
-                } else {
-                    y_scale -= y_step;
-                    if (y_scale < 0.1f) y_scale = 0.1f;
-                }
-                printf("Y scale = %.2f\n", y_scale);
-            }
-        }
+//             } else {
+//                 if (y_check_turn > 0) {
+//                     y_scale += y_step;
+//                 } else {
+//                     y_scale -= y_step;
+//                     if (y_scale < 0.1f) y_scale = 0.1f;
+//                 }
+//                 printf("Y scale = %.2f\n", y_scale);
+//             }
+//         }
 
-        sleep_ms(10);
-    }
-}
+//         sleep_ms(10);
+//     }
+// }
