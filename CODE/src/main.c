@@ -23,9 +23,11 @@
 #define BACKGROUND 0x0000 // black
 #define VIRTUAL_0 0xFFFF00// yellow
 
+#define SINETEST
 void init_adc_dma(void);  // Declare the function
 uint16_t adc_get_sample();
 uint16_t adc_get_next_sample();
+
 
 void init_spi_lcd() {
     gpio_set_function(PIN_CS, GPIO_FUNC_SIO);
@@ -47,13 +49,13 @@ void init_spi_lcd() {
 }
 
 //grid and general display for buttons
-void draw_grid() {
+void draw_grid(int volts_per_div, int pixels_per_div) {
     LCD_Clear(BACKGROUND);
 
     // draw grids
     for (int xx = 0; xx < LCD_W; xx++) {
-        for (int yy = 20; yy < LCD_H-19; yy++) {
-            if ((xx % 20 == 0 || yy % 20 == 0)) {
+        for (int yy = pixels_per_div; yy < LCD_H-pixels_per_div+1; yy++) {
+            if ((xx % pixels_per_div == 0 || yy % pixels_per_div == 0)) {
                 LCD_DrawPoint(xx, yy, GRID_COLOR);
             }
             if ((yy== 160)){
@@ -61,16 +63,76 @@ void draw_grid() {
             }
         }
     }
-
-    LCD_DrawString(5, 5, 0xF800, BACKGROUND, "1V/DIV", 12, 1);
-    LCD_DrawString(100, 5, 0xF800, BACKGROUND, "20ms/DIV", 12, 1);
+    char bufVolt[20];
+    char bufTime[20];
+    sprintf(bufVolt, "%dV/DIV", volts_per_div);
+    sprintf(bufTime, "%dms/DIV", pixels_per_div);
+    LCD_DrawString(20, 5, 0xF800, BACKGROUND, bufVolt, 12, 1);
+    LCD_DrawString(LCD_W-80, 5, 0xF800, BACKGROUND, bufTime, 12, 1);
     LCD_DrawString(10, LCD_H - 15, 0xF800, BACKGROUND, "Time Scale", 12, 1);
 }
 float get_sample(float t) { // SAMPLE SIGNAL 
     // You can replace this with ADC input later. 
-    return 0.5f * sinf(2 * 3.14159f * 2.0f * t); // 2 Hz wave + 0.25f * sinf(2 * 3.14159f * 10.0f * t) // 10 Hz wave ; }
+    return 2 * sin(10*t); // 2 Hz wave + 0.25f * sinf(2 * 3.14159f * 10.0f * t) // 10 Hz wave ; }
 }
+#ifdef SINETEST
+void run_oscilloscope(int volts_per_div, int pixels_per_div) {
+    draw_grid(volts_per_div, pixels_per_div);
 
+    int x = 0;
+    float t = 0;
+    float dt = 0.01;
+    float volt1 = 0;
+    float volt2 = 0;
+    int old_x =0;
+    float pixel1[LCD_W]={0};
+    float pixel2[LCD_W]={0};
+    int pixel_per_volt = pixels_per_div/volts_per_div;
+
+    while (1) {
+         for (int yy = pixels_per_div; yy < LCD_H - pixels_per_div+1; yy++) {
+            if ((x % pixels_per_div == 0 || yy % pixels_per_div == 0)) {
+                LCD_DrawPoint(x, yy, GRID_COLOR);
+            }
+            else{
+                LCD_DrawPoint(x, yy, BACKGROUND);
+            }
+            if ((yy== 160)){
+                LCD_DrawPoint(x, yy, VIRTUAL_0);
+            }
+        }
+        // sample the signal
+        volt1 = get_sample(t);
+        t += dt;
+        volt2 = get_sample(t);
+
+        // convert to vertical pixel
+        pixel1[x] = ((LCD_H) / 2) - volt1 * pixel_per_volt;
+        pixel2[x] = ((LCD_H) / 2) - volt2 * pixel_per_volt;
+
+        if (pixel1[x]<pixels_per_div){
+            pixel1[x] = pixels_per_div;
+        }
+        if (pixel1[x]>LCD_H-pixels_per_div){
+            pixel1[x] = LCD_H-pixels_per_div;
+        }
+        if (pixel2[x]<pixels_per_div){
+            pixel2[x] = pixels_per_div;
+        }
+        if (pixel2[x]>LCD_H-pixels_per_div){
+            pixel2[x] = LCD_H-pixels_per_div;
+        }
+
+        // draw line
+        old_x = (x==0)? 0:x-1; // %240, always wrap around after reaching end of screen
+        LCD_DrawLine(old_x,pixel1[old_x],x,pixel2[x],TRACE_COLOR);
+
+        x = (x+1) % (LCD_W-1); // %240, always wrap around after reaching end of screen
+
+        sleep_ms(10);
+    }
+}
+#else
 //update signal
 void run_oscilloscope() {
     draw_grid();
@@ -95,7 +157,7 @@ void run_oscilloscope() {
             }
         }
         // sample the signal
-        volt = adc_get_next_sample();
+        volt = _next_sample();
         float norm_volt = volt * (3.3/4095.0); // assuming 12-bit ADC
         //int running_offset = 0.999 * running_offset + 0.001 * norm_volt;
         float center_volt =norm_volt;
@@ -118,6 +180,8 @@ void run_oscilloscope() {
         sleep_ms(3);
     }
 }
+#endif
+
 
 int main() {
     stdio_init_all();
@@ -126,7 +190,8 @@ int main() {
     init_adc_dma();
     LCD_Setup();
     LCD_Clear(BACKGROUND);
-
-    run_oscilloscope();
+    int volts_per_div = 1;
+    int pixels_per_div = 80;
+    run_oscilloscope(volts_per_div, pixels_per_div);
     while (1);
 }

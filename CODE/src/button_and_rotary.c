@@ -2,16 +2,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define BUTTON_MODE 23
-#define BUTTON_CAPTURE 17
+#define BUTTON_MODE 3
+#define BUTTON_CAPTURE 4
 
-#define X_CLK 12
-#define X_DT 11
-#define X_SW 10
+#define X_CLK 5
+#define X_DT 6
+#define X_SW 7
 
-#define Y_CLK 5
-#define Y_DT 4
-#define Y_SW 3
+#define Y_CLK 8
+#define Y_DT 9
+#define Y_SW 10
 
 // scale settings of the rotary
 int x_scale = 0;
