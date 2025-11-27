@@ -52,21 +52,26 @@ void init_adc_dma() {
 
 uint16_t adc_get_sample(uint32_t i)
 {
-        return 0.5f * sinf(2 * 3.14159f * 2.0f * i); // 2 Hz wave + 0.25f * sinf(2 * 3.14159f * 10.0f * t) // 10 Hz wave ; }
-    // // Convert base pointer to byte pointer
-    // uint8_t *base = (uint8_t *)adc_fifo_out;
+    // Convert base pointer to byte pointer
+    uint8_t *base = (uint8_t *)adc_fifo_out;
 
-    // // Read DMA next-write address
-    // uint32_t next = dma_hw->ch[0].write_addr;
+    // Read DMA next-write address
+    uint32_t next = dma_hw->ch[0].write_addr;
 
-    // // Compute byte offset of the i-th most recent sample
-    // // -2 for most recent
-    // // -(i * 2) for arbitrary sample i
-    // uint32_t offset = (next - (uint32_t)base - 2 - (i * 2));    // Move back 1 + i samples
-    // offset &= ((BUFFER_SIZE * 2) - 1);                          // Wrap around if necessary
+    // Compute byte offset of the i-th most recent sample
+    // -2 for most recent
+    // -(i * 2) for arbitrary sample i
+    uint32_t offset = (next - (uint32_t)base - 2 - (i * 2));    // Move back 1 + i samples
+    offset &= ((BUFFER_SIZE * 2) - 1);                          // Wrap around if necessary
 
-    // // Convert back to uint16_t pointer and return the sample
-    // return *(uint16_t *)(base + offset);
+    // Convert back to uint16_t pointer and return the sample
+    return *(uint16_t *)(base + offset);
+}
+static uint32_t read_index = 0;
+uint16_t adc_get_next_sample() {
+    uint16_t sample = adc_fifo_out[read_index];
+    read_index = (read_index + 1) & (BUFFER_SIZE - 1); // wrap around
+    return sample;
 }
 
 //////////////////////////////////////////////////////////////////////////////
