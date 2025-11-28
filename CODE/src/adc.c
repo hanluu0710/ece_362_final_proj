@@ -17,15 +17,16 @@ uint16_t adc_fifo_out[BUFFER_SIZE] __attribute__((aligned(BUFFER_SIZE * 2)));
 
 void init_adc_freerun() {
     adc_init();
-    adc_gpio_init(40);
+    adc_gpio_init(47);
     adc_select_input(0);
     adc_run(true);
+
 }
 
 void init_dma() {
-    dma_channel_set_read_addr(0, &adc_hw->fifo, false);
-    dma_channel_set_write_addr(0, &adc_fifo_out, false);
-    dma_channel_hw_addr(0)->transfer_count = 0x10000001;
+    dma_channel_set_read_addr(7, &adc_hw->fifo, false);
+    dma_channel_set_write_addr(7, &adc_fifo_out, false);
+    dma_channel_hw_addr(7)->transfer_count = 0x10000001;
     
     /*
     for (int i = 0; i < BUFFER_SIZE; i++) {
@@ -41,13 +42,33 @@ void init_dma() {
         |  (1 << DMA_CH0_CTRL_TRIG_INCR_WRITE_LSB)          // Increment address after write
         |  (1 << DMA_CH0_CTRL_TRIG_DATA_SIZE_LSB)           // Select halfword (16 bits)
         |  (1 << DMA_CH0_CTRL_TRIG_EN_LSB);                 // Enable
-    dma_hw->ch[0].ctrl_trig = temp;
+    dma_hw->ch[7].ctrl_trig = temp;
 }
 
 void init_adc_dma() {
+    adc_init();
+
+    // Enable ADC GPIO
+    adc_gpio_init(47);          // GPIO 47 = ADC7 input
+    adc_select_input(7);        // Select ADC channel 7
+
+    // Fastest sampling (48 MHz)
+    adc_set_clkdiv(0);
+
+    // Configure FIFO BEFORE running ADC
+    adc_fifo_setup(
+        true,    // Write each sample to FIFO
+        true,    // Enable DMA request
+        1,       // DREQ on every sample
+        false,   // No ERR bit
+        false    // 12-bit mode (default)
+    );
+
+    // Now DMA init
     init_dma();
-    init_adc_freerun();
-    adc_fifo_setup(true, true, 1, false, false);
+
+    // Finally start ADC
+    adc_run(true);
 }
 
 uint16_t adc_get_sample(uint32_t i)
@@ -56,7 +77,7 @@ uint16_t adc_get_sample(uint32_t i)
     uint8_t *base = (uint8_t *)adc_fifo_out;
 
     // Read DMA next-write address
-    uint32_t next = dma_hw->ch[0].write_addr;
+    uint32_t next = dma_hw->ch[7].write_addr;
 
     // Compute byte offset of the i-th most recent sample
     // -2 for most recent

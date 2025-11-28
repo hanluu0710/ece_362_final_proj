@@ -27,7 +27,7 @@
 #define BACKGROUND 0x0000 // black
 #define VIRTUAL_0 0xFF00// yellow
 
-#define SINETEST
+//#define SINETEST
 void init_adc_dma(void);  // Declare the function
 void init_encoders(void);
 uint16_t adc_get_sample();
@@ -198,48 +198,59 @@ void run_oscilloscope() {
     draw_grid();
 
     int x = 0;
-    float volt = 0;
-    int old_x =0;
-    int y=0;
-    int ybuf [LCD_W] = {0};
-   // float running_offset = 1.65;   // assume mid-supply at start
+    int ybuf [4096];
+    int old_x = 0;
+    float t = 0;
+    int pixel_per_volt = pixels_per_div / volts_per_div;
+    float time_per_pixel = (float)time_per_div / pixels_per_div;
 
     while (1) {
-        for (int yy = 20; yy < LCD_H - 19; yy++) {
+        controls();
+        if (pause) {
+            sleep_ms(5);
+            continue;
+        }
+
+        if (grid_dirty) {
+            draw_grid();
+            grid_dirty = false;
+        }
+
+        for (int yy = 20; yy < LCD_H - 20+1; yy++) {
             if ((x % 20 == 0 || yy % 20 == 0)) {
-                LCD_DrawPoint(x, yy, GRID_COLOR);
+                LCD_DrawPoint(x+12, yy, GRID_COLOR);
             }
             else{
-                LCD_DrawPoint(x, yy, BACKGROUND);
+                LCD_DrawPoint(x+12, yy, BACKGROUND);
             }
-            if ((yy== 160)){
-                LCD_DrawPoint(x, yy, VIRTUAL_0);
+            if ((yy== 160-y_offset*pixels_per_div)){
+                LCD_DrawPoint(x+12, yy, VIRTUAL_0);
             }
         }
-        // sample the signal
-        volt = _next_sample();
-        float norm_volt = volt * (3.3/4095.0); // assuming 12-bit ADC
-        //int running_offset = 0.999 * running_offset + 0.001 * norm_volt;
-        float center_volt =norm_volt;
-        float volts_per_div = 0.5;      // each grid square is 0.5V
-        float pixels_per_div = 20.0;    // each grid square is 20px
-        float pixels = center_volt * (pixels_per_div / volts_per_div);
 
-        printf("Sample: %.3f\n", volt);
-        // convert to vertical pixel
-        int y = pixels+160;
-        if (y < 20){y = 20;}
-        if (y>LCD_H-20){y = LCD_H-20;}
+        // Sample the ADC signal (get the most recent sample)
+        uint16_t adc_sample = adc_get_sample(0);  // Get the next ADC sample
+        float volt = adc_sample * (3.3 / 4095.0);  // Convert to voltage assuming 12-bit ADC
+        float center_volt = volt;
+        float y = ((LCD_H) / 2) - center_volt * pixel_per_volt - y_offset*pixels_per_div;
+        printf("ADC RAW: %u   Voltage: %.3f V\n", adc_sample, center_volt);
+        sleep_ms(100);
+        // Convert to vertical pixel
+        //int y = (int)(pixels + 160);
+        if (y < 20) y = 20;
+        if (y > LCD_H - 20) y = LCD_H - 20;
+
+        // Draw the signal on the screen
+        old_x = (x == 0) ? 0 : x - 1;
+        LCD_DrawLine(old_x + 12, ybuf[old_x], x + 12, y, TRACE_COLOR);
+
         ybuf[x] = y;
-        // draw line
-        old_x = (x==0)? 0:x-1; // %240, always wrap around after reaching end of screen
-        LCD_DrawLine(old_x,ybuf[old_x],x,ybuf[x],TRACE_COLOR);
-
-        x = (x+1) % (LCD_W-1); // %240, always wrap around after reaching end of screen
+        x = (x + 1) % (LCD_W - 1);
 
         sleep_ms(3);
     }
 }
+
 #endif
 
 
@@ -253,6 +264,12 @@ int main() {
     init_encoders(); 
     run_oscilloscope();
     
+    while (1) {
+        uint16_t s = adc_get_sample(0);  // Most recent sample
+        float v = (s * 3.3f) / 4095.0f;  // Convert to volts
 
+        printf("ADC RAW: %u   Voltage: %.3f V\n", s, v);
+        sleep_ms(100);
+    }
     while (1);
 }
