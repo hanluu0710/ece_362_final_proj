@@ -1,4 +1,4 @@
-#ifdef WAVEGEN_H
+#ifndef WAVEGEN_H
 #define WAVEGEN_H
 
 #include<stdint.h>
