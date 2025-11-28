@@ -92,4 +92,6 @@ typedef struct {
 
 void LCD_DrawPicture(u16 x0, u16 y0, const Picture *pic);
 
+extern float pixel1[];
+extern float pixel2[];
 #endif

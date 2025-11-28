@@ -30,6 +30,8 @@ extern bool x_mode_changed;
 extern bool y_mode_changed;
 extern float x_offset;
 extern float y_offset;
+extern bool capture_mode;
+extern float capture_buffer[];
 
 
 #endif

@@ -25,10 +25,11 @@
 #define GRID_COLOR 0x7BEF // blue
 #define TRACE_COLOR 0xF800 // neon green
 #define BACKGROUND 0x0000 // black
-#define VIRTUAL_0 0xFFFF00// yellow
+#define VIRTUAL_0 0xFF00// yellow
 
 #define SINETEST
 void init_adc_dma(void);  // Declare the function
+void init_encoders(void);
 uint16_t adc_get_sample();
 uint16_t adc_get_next_sample();
 
@@ -86,14 +87,12 @@ void draw_grid() {
     char buf[8];
     for (int i = 0; i <= LCD_H/2-20; i += pixels_per_div){
         int label_voltage = volts_per_div * (i / pixels_per_div);
-        printf("label: %d\n", label_voltage);
         sprintf(buf, "%d", label_voltage);
         LCD_DrawString(0, (LCD_H/2) - i-5, 0xF800, BACKGROUND, buf, 12, 1);
         LCD_DrawString(0, (LCD_H/2) + i-5, 0xF800, BACKGROUND, buf, 12, 1);
     }
     for (int i = 10; i <= LCD_W-30; i += pixels_per_div){
         int label_time = time_per_div * ((i-10) / pixels_per_div);
-        printf("label: %d\n", label_time);
         sprintf(buf, "%d", label_time);
         LCD_DrawString(i, LCD_H - 15, 0xF800, BACKGROUND, buf, 12, 1);
     }
@@ -119,7 +118,6 @@ void run_oscilloscope() {
     float pixel1[LCD_W]={0};
     float pixel2[LCD_W]={0};
     int pixel_per_volt = 0;
-    int pixel_per_period = 0;
 
     while (1) {
         controls();

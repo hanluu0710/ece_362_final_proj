@@ -340,6 +340,8 @@ extern int time_per_div;
 extern float dt;
 extern bool grid_dirty;
 
+
+
 void encoder_callback(uint gpio, uint32_t events)
 {
     if (gpio == X_CLK)
