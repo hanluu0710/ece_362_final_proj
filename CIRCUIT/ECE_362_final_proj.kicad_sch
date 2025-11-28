@@ -5583,6 +5583,16 @@
 	)
 	(wire
 		(pts
+			(xy 142.24 209.55) (xy 146.05 209.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "029aef8a-ebed-44cb-a88e-ae7fb30ce5af")
+	)
+	(wire
+		(pts
 			(xy 144.78 86.36) (xy 144.78 77.47)
 		)
 		(stroke
@@ -5620,6 +5630,16 @@
 			(type default)
 		)
 		(uuid "09a8ec01-2cb8-4833-abd1-122728c1976f")
+	)
+	(wire
+		(pts
+			(xy 146.05 217.17) (xy 146.05 212.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0b7af897-be35-4e4a-806c-51028af6e3b1")
 	)
 	(wire
 		(pts
@@ -5840,6 +5860,16 @@
 			(type default)
 		)
 		(uuid "2fc54d30-852f-4f11-8085-94ec93e0dd40")
+	)
+	(wire
+		(pts
+			(xy 166.37 212.09) (xy 163.83 212.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "320bfa30-ad07-4a82-be51-f67bc46bf52f")
 	)
 	(wire
 		(pts
@@ -6143,6 +6173,16 @@
 	)
 	(wire
 		(pts
+			(xy 146.05 217.17) (xy 142.24 217.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "674ffc44-15e0-43de-80d3-a7375af90cc8")
+	)
+	(wire
+		(pts
 			(xy 165.1 168.91) (xy 157.48 168.91)
 		)
 		(stroke
@@ -6433,6 +6473,16 @@
 	)
 	(wire
 		(pts
+			(xy 163.83 209.55) (xy 156.21 209.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ba64c94-d36b-409d-a216-96a50abb8d55")
+	)
+	(wire
+		(pts
 			(xy 228.6 184.15) (xy 215.9 184.15)
 		)
 		(stroke
@@ -6460,6 +6510,16 @@
 			(type default)
 		)
 		(uuid "a46f4ba7-53cf-430b-b1c9-90b90d5d2be2")
+	)
+	(wire
+		(pts
+			(xy 163.83 207.01) (xy 163.83 209.55)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4786ec7-6aa0-45ed-89ca-b8aa1da0cc38")
 	)
 	(wire
 		(pts
@@ -6530,6 +6590,16 @@
 			(type default)
 		)
 		(uuid "aa2e868a-a8d3-4f40-92a4-6845b0451068")
+	)
+	(wire
+		(pts
+			(xy 132.08 217.17) (xy 134.62 217.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b0e52327-9804-4170-aded-7fae3e489c63")
 	)
 	(wire
 		(pts
@@ -7631,6 +7701,16 @@
 		)
 		(uuid "d8045e11-6417-4ca2-beec-29203ae3be59")
 	)
+	(label "GPIO3"
+		(at 142.24 209.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "daf0bba9-73d3-4dfa-9c72-5810796ec27e")
+	)
 	(label "GPIO15"
 		(at 110.49 140.97 180)
 		(effects
@@ -7752,6 +7832,80 @@
 			(project "ECE_362_final_proj"
 				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
 					(reference "#PWR01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_MEC_5E")
+		(at 151.13 212.09 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0753fc89-6ed4-4209-bc59-f8a28bf281b7")
+		(property "Reference" "SW6"
+			(at 151.13 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "BUTTON_MODE"
+			(at 151.13 204.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Button_Tactile:SW-TH_4P-L6.0-W6.0-P4.50-LS6.5"
+			(at 151.13 204.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.apem.com/int/index.php?controller=attachment&id_attachment=1371"
+			(at 151.13 204.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "MEC 5E single pole normally-open tactile switch"
+			(at 151.13 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "19f4f67e-77e3-440b-aa9b-2e1f84d4366d")
+		)
+		(pin "3"
+			(uuid "bf9b668d-e353-46cd-995d-01255adf00d4")
+		)
+		(pin "4"
+			(uuid "86cca0e8-b240-4f9a-a42b-cc2cacd08042")
+		)
+		(pin "1"
+			(uuid "90a70320-8cd2-4019-a154-1017908e2fff")
+		)
+		(instances
+			(project "ECE_362_final_proj"
+				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
+					(reference "SW6")
 					(unit 1)
 				)
 			)
@@ -8313,6 +8467,73 @@
 		)
 	)
 	(symbol
+		(lib_name "GND_7")
+		(lib_id "power:GND")
+		(at 166.37 212.09 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1e23caf7-5a6d-48bb-90f8-b038e8ed6e3f")
+		(property "Reference" "#PWR029"
+			(at 166.37 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 166.37 217.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 166.37 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 166.37 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 166.37 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d4cd69b0-cf91-4544-a995-530050b1266c")
+		)
+		(instances
+			(project "ECE_362_final_proj"
+				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
+					(reference "#PWR029")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3.3V")
 		(at 241.3 116.84 0)
 		(unit 1)
@@ -8825,6 +9046,72 @@
 			(project "ECE_362_final_proj"
 				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
 					(reference "SW5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3.3V")
+		(at 163.83 207.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "391d7f11-6502-4311-b977-45da21dcd035")
+		(property "Reference" "#PWR027"
+			(at 163.83 210.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 163.83 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 163.83 207.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 163.83 207.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
+			(at 163.83 207.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d5d86186-c8da-49a5-818f-8e404107ab47")
+		)
+		(instances
+			(project "ECE_362_final_proj"
+				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
+					(reference "#PWR027")
 					(unit 1)
 				)
 			)
@@ -10066,6 +10353,73 @@
 		)
 	)
 	(symbol
+		(lib_name "GND_7")
+		(lib_id "power:GND")
+		(at 132.08 217.17 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8d3bfba1-9d6d-4666-a32c-059be355929e")
+		(property "Reference" "#PWR028"
+			(at 132.08 223.52 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 132.08 222.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 132.08 217.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 132.08 217.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 132.08 217.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1232ca5e-66e5-4d08-bfbb-fbfbc9045dfa")
+		)
+		(instances
+			(project "ECE_362_final_proj"
+				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
+					(reference "#PWR028")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3.3V")
 		(at 165.1 166.37 0)
 		(unit 1)
@@ -10389,6 +10743,73 @@
 			(project ""
 				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
 					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 138.43 217.17 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9e183fcb-6343-48af-9993-aa8599a0f2d1")
+		(property "Reference" "R12"
+			(at 138.43 212.344 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1000"
+			(at 138.43 214.63 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 138.176 218.186 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 138.43 217.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 138.43 217.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f576d08f-2ae1-418d-8db6-6f913ba6e427")
+		)
+		(pin "1"
+			(uuid "a8e4da4c-0881-41e7-90cf-3736ef35f358")
+		)
+		(instances
+			(project "ECE_362_final_proj"
+				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
+					(reference "R12")
 					(unit 1)
 				)
 			)
@@ -11836,6 +12257,73 @@
 			(project ""
 				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
 					(reference "#PWR08")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 160.02 212.09 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d67ba7f3-42f2-430f-8661-ed6c1c3fc433")
+		(property "Reference" "R13"
+			(at 160.02 216.916 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "1000"
+			(at 160.02 214.63 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 160.274 211.074 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 160.02 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 160.02 212.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "19774663-59e9-4725-b2d1-536232ccd20e")
+		)
+		(pin "1"
+			(uuid "80ee17d0-f5e8-4377-a758-38ca1f62c318")
+		)
+		(instances
+			(project "ECE_362_final_proj"
+				(path "/911fe6d0-8119-481e-b5ba-1a363818463d"
+					(reference "R13")
 					(unit 1)
 				)
 			)
