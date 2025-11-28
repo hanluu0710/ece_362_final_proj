@@ -68,27 +68,22 @@ extern bool grid_dirty;
 //Capture
 extern bool pause;
 
-void capture_button_isr(uint gpio, uint32_t events) {
-    if (gpio == BUTTON_CAPTURE) {
-        pause = !pause;      // toggle freeze
-        printf("PAUSE = %d\n", pause);
-    }
-}
-
-void encoder_callback(uint gpio, uint32_t events)
+void gpio_callback(uint gpio, uint32_t events)
 {
-    if (gpio == X_CLK)
-    {
+    if (gpio == X_CLK){
         int clk = gpio_get(X_CLK);
         int dt  = gpio_get(X_DT);
         x_encoder_steps += (dt != clk) ? 1 : -1;
         x_encoder_steps %= 10;
     }
-    else if (gpio == Y_CLK)
-    {
+    else if (gpio == Y_CLK){
         int clk = gpio_get(Y_CLK);
         int dt  = gpio_get(Y_DT);
         y_encoder_steps += (dt != clk) ? 1 : -1;
+    }
+    else if (gpio == BUTTON_CAPTURE) {
+        pause = !pause;
+        printf("PAUSE = %d\n", pause);
     }
 }
 
@@ -116,7 +111,7 @@ void init_encoders()
     X_CLK,
     GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL,
     true,
-    &encoder_callback
+    &gpio_callback
     );
 
     gpio_set_irq_enabled(
@@ -124,13 +119,11 @@ void init_encoders()
         GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL,
         true
     );
-    gpio_set_irq_enabled_with_callback(
-    BUTTON_CAPTURE,
-    GPIO_IRQ_EDGE_RISE,
-    true,
-    &capture_button_isr
+    gpio_set_irq_enabled(
+        BUTTON_CAPTURE,
+        GPIO_IRQ_EDGE_RISE,
+        true
     );
-
 }
 bool last_x_button = false;
 bool last_y_button = false;

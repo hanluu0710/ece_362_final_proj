@@ -121,9 +121,9 @@ void run_oscilloscope() {
 
     while (1) {
         controls();
-        if (pause) {
+        if (pause){
             sleep_ms(5);
-            continue;    // Skip sampling & drawing
+            continue;
         }
         if (x_mode_changed) {
             x_mode_changed = false;
@@ -250,7 +250,7 @@ int main() {
     init_adc_dma();
     LCD_Setup();
     LCD_Clear(BACKGROUND);
-    init_encoders();   // NEW
+    init_encoders(); 
     run_oscilloscope();
     
 
