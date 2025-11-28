@@ -159,6 +159,11 @@ void run_oscilloscope() {
                 LCD_DrawPoint(x+12, yy, VIRTUAL_0);
             }
         }
+
+        if (pause) {
+            sleep_ms(10);
+            continue;    // Skip sampling & drawing
+        }
         // sample the signal
         volt1 = get_sample(t);
         t += time_per_pixel * 0.001; //t += dt;
