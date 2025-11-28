@@ -254,7 +254,6 @@ int main() {
     LCD_Setup();
     LCD_Clear(BACKGROUND);
     init_encoders(); 
-    run_oscilloscope();
 //wavegen pwm part
     wavegen_init(WAVEGEN_PIN);
     wavegen_set_type(WAVE_SINE);
