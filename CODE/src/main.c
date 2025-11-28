@@ -121,6 +121,10 @@ void run_oscilloscope() {
 
     while (1) {
         controls();
+        if (pause) {
+            sleep_ms(5);
+            continue;    // Skip sampling & drawing
+        }
         if (x_mode_changed) {
             x_mode_changed = false;
 
@@ -158,11 +162,6 @@ void run_oscilloscope() {
             if ((yy== 160-y_offset*pixels_per_div)){
                 LCD_DrawPoint(x+12, yy, VIRTUAL_0);
             }
-        }
-
-        if (pause) {
-            sleep_ms(10);
-            continue;    // Skip sampling & drawing
         }
         // sample the signal
         volt1 = get_sample(t);
