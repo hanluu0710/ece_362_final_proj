@@ -27,6 +27,12 @@
 #define BACKGROUND 0x0000 // black
 #define VIRTUAL_0 0xFF00// yellow
 
+//pwm output 
+#define WAVEGEN_PIN 18
+
+//pwm output 
+#define WAVEGEN_PIN 18
+
 //#define SINETEST
 void init_adc_dma(void);  // Declare the function
 void init_encoders(void);
@@ -262,6 +268,13 @@ int main() {
     LCD_Setup();
     LCD_Clear(BACKGROUND);
     init_encoders(); 
+//wavegen pwm part
+    wavegen_init(WAVEGEN_PIN);
+    wavegen_set_type(WAVE_SINE);
+    wavegen_set_frequency(1000.0f);
+    wavegen_set_amplitude(1.5f);
+    wavegen_enable(true);
+
     run_oscilloscope();
     
     while (1) {
