@@ -36,6 +36,38 @@ static inline float clampf(float x, float lo, float hi){
     return x;
 }
 
+// (from David) This is needed because the oscilloscope can't read the PWM, it's a hardware thingy. 
+// It's not checking for the voltage sample
+float wavegen_get_sample(float t)
+{
+    if (!wavegen_config.enabled)
+        return 0.0f;
+
+    float amplitude = wavegen_config.amplitude;
+    float freq = wavegen_config.frequency;
+
+    float phase = freq * t;
+
+    switch (wavegen_config.type)
+    {
+        case WAVE_SINE:
+            return amplitude * sinf(2.0f * M_PI * phase);
+
+        case WAVE_SQUARE:
+            return (sinf(2.0f * M_PI * phase) > 0 ? amplitude : -amplitude);
+
+        case WAVE_SAWTOOTH:
+            return amplitude * (2.0f * (phase - floorf(phase + 0.5f)));
+
+        case WAVE_TRIANGLE:
+            return amplitude * (2.0f * fabsf(2.0f * (phase - floorf(phase + 0.5f))) - 1.0f);
+
+        default:
+            return 0.0f;
+    }
+}
+
+
 static void wavegen_fill_wavetable(WaveType, float amp_volt)
 {
     float norm_amp = clampf(amp_volt, 0.0f, WAVEGEN_MAX_VOLT);
@@ -71,7 +103,7 @@ static void wavegen_fill_wavetable(WaveType, float amp_volt)
                 if (t < 0.25f) //first quarter: ramp up from 0 to ~1
                 s = 4.0f * t;
                 else if (t < 0.74f)
-                s = 2.0f - 4.0f * 1; // middle seg
+                s = 2.0f - 4.0f * t; // middle seg
                 else
                 s = 4.0f * t - 4.0f; // final seg : ramp from negative region up toward
                 break;
