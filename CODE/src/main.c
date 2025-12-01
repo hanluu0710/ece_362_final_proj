@@ -5,7 +5,7 @@
 #include <string.h>
 #include <math.h>  
 #define _USE_MATH_DEFINES 
-#include "wavegen.h"
+//#include "wavegen.h"
 #include "buttons.h"
 
 
@@ -26,12 +26,6 @@
 #define TRACE_COLOR 0xF800 // neon green
 #define BACKGROUND 0x0000 // black
 #define VIRTUAL_0 0xFF00// yellow
-
-//pwm output 
-#define WAVEGEN_PIN 18
-
-//pwm output 
-#define WAVEGEN_PIN 18
 
 //#define SINETEST
 void init_adc_dma(void);  // Declare the function
@@ -62,7 +56,6 @@ void init_spi_lcd() {
 int volts_per_div = 1;
 int time_per_div = 1;
 int pixels_per_div = 20; //20-LCH-20
-float dt = 0.001; // Xms/div
 bool grid_dirty = false;
 bool pause = false;
 extern int x_mode;
@@ -84,8 +77,18 @@ void draw_grid() {
     }
     char bufVolt[20];
     char bufTime[20];
+    
     sprintf(bufVolt, "%dV/DIV", volts_per_div);
-    sprintf(bufTime, "%dms/DIV", time_per_div);
+    
+    if (time_per_div>1000000){ //if > 1s
+        sprintf(bufTime, "%ds/DIV", time_per_div/1000000);
+    }
+    else if (time_per_div > 1000){ //if > 1ms
+        sprintf(bufTime, "%dms/DIV", time_per_div/1000);
+    }
+    else {
+        sprintf(bufTime, "%dus/DIV", time_per_div);
+    }
     LCD_DrawString(20, 5, 0xF800, BACKGROUND, bufVolt, 12, 1);
     LCD_DrawString(LCD_W-60, 5, 0xF800, BACKGROUND, bufTime, 12, 1);
     
@@ -98,9 +101,17 @@ void draw_grid() {
         LCD_DrawString(0, (LCD_H/2) + i-5, 0xF800, BACKGROUND, buf, 12, 1);
     }
     for (int i = 10; i <= LCD_W-30; i += pixels_per_div){
-        int label_time = time_per_div * ((i-10) / pixels_per_div);
-        sprintf(buf, "%d", label_time);
-        LCD_DrawString(i, LCD_H - 15, 0xF800, BACKGROUND, buf, 12, 1);
+        if (!((i-10)%40)){
+            int label_time = time_per_div * ((i-10) / pixels_per_div);
+            if (time_per_div>1000000){ //if > 1s
+                label_time /=1000000;
+            }
+            else if (time_per_div > 1000){ //if > 1ms
+                label_time /=1000;
+            }
+            sprintf(buf, "%d", label_time);
+            LCD_DrawString(i, LCD_H - 15, 0xF800, BACKGROUND, buf, 12, 1);
+        }  
     }
 }
 float get_sample(float t) { // SAMPLE SIGNAL 
@@ -171,7 +182,7 @@ void run_oscilloscope() {
         }
         // sample the signal
         volt1 = get_sample(t);
-        t += time_per_pixel * 0.001; //t += dt;
+        t += time_per_pixel*0.000001; //t += dt;
         volt2 = get_sample(t);
 
         // convert to vertical pixel
@@ -204,25 +215,48 @@ void run_oscilloscope() {
     draw_grid();
 
     int x = 0;
-    int ybuf [4096];
-    int old_x = 0;
     float t = 0;
-    int pixel_per_volt = pixels_per_div / volts_per_div;
-    float time_per_pixel = (float)time_per_div / pixels_per_div;
+    float volt1 = 0;
+    float volt2 = 0;
+    int old_x =0;
+    float pixel1[LCD_W]={0};
+    float pixel2[LCD_W]={0};
+    int pixel_per_volt = 0;
 
     while (1) {
         controls();
-        if (pause) {
+        if (pause){
             sleep_ms(5);
             continue;
         }
+        if (x_mode_changed) {
+            x_mode_changed = false;
 
+            char msg[16];
+            sprintf(msg, "%s X", x_mode ? "Shift" : "Scale");
+            display_mode_message(msg);
+        }
+
+        if (y_mode_changed) {
+                y_mode_changed = false;
+
+                char msg[16];
+                sprintf(msg, "%s Y", y_mode ? "Shift" : "Scale");
+                display_mode_message(msg);
+        }
+
+        pixel_per_volt = pixels_per_div/volts_per_div;
+        float time_per_pixel = (float)time_per_div / pixels_per_div;
         if (grid_dirty) {
             draw_grid();
             grid_dirty = false;
+            char msg[16];
+            sprintf(msg, "%s X", x_mode ? "Shift" : "Scale");
+            display_mode_message(msg);
+            sprintf(msg, "%s Y", y_mode ? "Shift" : "Scale");
+            display_mode_message(msg);
         }
-
-        for (int yy = 20; yy < LCD_H - 20+1; yy++) {
+         for (int yy = 20; yy < LCD_H - 20+1; yy++) {
             if ((x % 20 == 0 || yy % 20 == 0)) {
                 LCD_DrawPoint(x+12, yy, GRID_COLOR);
             }
@@ -233,30 +267,38 @@ void run_oscilloscope() {
                 LCD_DrawPoint(x+12, yy, VIRTUAL_0);
             }
         }
+        // sample the signal
+        int i = 0;
+        volt1 = adc_get_sample(i);
+        volt1 = volt1 * (3.3 / 4095.0)-1.65;
+        i++; //t += dt;
+        volt2 = adc_get_sample(i);
+        volt2 = volt2 * (3.3 / 4095.0)-1.65;
 
-        // Sample the ADC signal (get the most recent sample)
-        uint16_t adc_sample = adc_get_sample(0);  // Get the next ADC sample
-        float volt = adc_sample * (3.3 / 4095.0);  // Convert to voltage assuming 12-bit ADC
-        float center_volt = volt;
-        float y = ((LCD_H) / 2) - center_volt * pixel_per_volt - y_offset*pixels_per_div;
-        printf("ADC RAW: %u   Voltage: %.3f V\n", adc_sample, center_volt);
-        sleep_ms(100);
-        // Convert to vertical pixel
-        //int y = (int)(pixels + 160);
-        if (y < 20) y = 20;
-        if (y > LCD_H - 20) y = LCD_H - 20;
+        // convert to vertical pixel
+        pixel1[x] = ((LCD_H) / 2) - volt1 * pixel_per_volt - y_offset*pixels_per_div;
+        pixel2[x] = ((LCD_H) / 2) - volt2* pixel_per_volt - y_offset*pixels_per_div;
 
-        // Draw the signal on the screen
-        old_x = (x == 0) ? 0 : x - 1;
-        LCD_DrawLine(old_x + 12, ybuf[old_x], x + 12, y, TRACE_COLOR);
-
-        ybuf[x] = y;
-        x = (x + 1) % (LCD_W - 1);
-
-        sleep_ms(3);
+        if (pixel1[x]<pixels_per_div){
+            pixel1[x] = pixels_per_div;
+        }
+        if (pixel1[x]>LCD_H-pixels_per_div){
+            pixel1[x] = LCD_H-pixels_per_div;
+        }
+        if (pixel2[x]<pixels_per_div){
+            pixel2[x] = pixels_per_div;
+        }
+        if (pixel2[x]>LCD_H-pixels_per_div){
+            pixel2[x] = LCD_H-pixels_per_div;
+        }
+        // draw line
+        old_x = (x==0)? 0:x-1; // %240, always wrap around after reaching end of screen
+        LCD_DrawLine(old_x+12,pixel1[old_x],x+12,pixel2[x],TRACE_COLOR);
+        
+        x = ((x+1) % (LCD_W)); // %240, always wrap around after reaching end of screen
+        sleep_ms(2);
     }
 }
-
 #endif
 
 
@@ -268,21 +310,7 @@ int main() {
     LCD_Setup();
     LCD_Clear(BACKGROUND);
     init_encoders(); 
-//wavegen pwm part
-    wavegen_init(WAVEGEN_PIN);
-    wavegen_set_type(WAVE_SINE);
-    wavegen_set_frequency(1000.0f);
-    wavegen_set_amplitude(1.5f);
-    wavegen_enable(true);
-
     run_oscilloscope();
-    
-    while (1) {
-        uint16_t s = adc_get_sample(0);  // Most recent sample
-        float v = (s * 3.3f) / 4095.0f;  // Convert to volts
 
-        printf("ADC RAW: %u   Voltage: %.3f V\n", s, v);
-        sleep_ms(100);
-    }
     while (1);
 }

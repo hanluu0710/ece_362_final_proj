@@ -2,7 +2,7 @@
 #define WAVEGEN_H
 
 #include<stdint.h>
-#include "PrintCore/stdlib.h"
+//#include "PrintCore/stdlib.h"
 
 typedef enum {
     WAVE_OFF = 0,

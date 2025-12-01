@@ -196,26 +196,55 @@ void controls()
     // X encoder steps
     int steps_x = x_encoder_steps;
     x_encoder_steps = 0;
-
+    int factor = 1;
     if (steps_x != 0)
     {
         if (x_mode == 1) // SHIFT
         {
             x_offset += steps_x * 0.3f;
-            printf("X Offset = %.2f\n", x_offset);
-            grid_dirty = true;
+            printf("X Offset = %.2f\n", x_offset); 
         }
         else // SCALE (time)
         {
-            time_per_div += steps_x;
-            time_per_div %= 11;
-            if (time_per_div < 1) time_per_div = 1;
+            if (time_per_div>=1000000){ //if > 1s
+                factor = 1000000; // +1s
+            }
+            else if (time_per_div >= 100000 ){ //if > 100ms
+                factor = 100000; // +100ms
+            }
+            else if (time_per_div >= 10000 ){ //if > 10ms
+                factor = 10000; // +10ms
+            }
+            else if (time_per_div >= 1000 ){ //if > 1ms
+                factor = 1000; // +1ms
+            }
+            else if (time_per_div >= 100){ //if > 100us
+                factor = 100; // +100us
+            }
+            else if (time_per_div >= 10){
+                factor = 10; // +10us
+            }
+            else {
+                factor = 1;
+            }
 
-            dt = time_per_div * 0.001; // second
-            grid_dirty = true;
-
-            printf("Time/div = %dms\n", time_per_div);
+            time_per_div += factor*steps_x;
+            if (time_per_div<1){
+                time_per_div =1;
+            }
+            time_per_div %= 10000001; //min = 1us; max = 10s; +5ms every increment
+            //printf("Time/div = %dus\n", time_per_div);         
+            if (time_per_div>1000000){ //if > 1s
+                printf("Time/div = %ds\n", time_per_div/1000000);
+            }
+            else if (time_per_div > 1000){ //if > 1ms
+                printf("Time/div = %dms\n", time_per_div/1000);
+            }
+            else {
+                printf("Time/div = %dus\n", time_per_div);
+            }
         }
+        grid_dirty = true;
     }
 
     // Y encoder steps
@@ -224,10 +253,10 @@ void controls()
 
     if (steps_y != 0)
     {
+        grid_dirty = true;
         if (y_mode == 1) // SHIFT
         {
             y_offset = y_offset + steps_y * volts_per_div;
-            grid_dirty = true;
             printf("Y Offset = %.2f\n", y_offset);
         }
         else // SCALE (voltage)
@@ -235,8 +264,6 @@ void controls()
             volts_per_div += steps_y;
             volts_per_div %= 11;
             if (volts_per_div < 1) volts_per_div = 1;
-
-            grid_dirty = true;
             printf("Volts/div = %dV\n", volts_per_div);
         }
     }

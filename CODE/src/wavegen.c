@@ -1,3 +1,7 @@
+#ifdef ENABLE_WAVEGEN
+// all wavegen code here
+
+
 #include "wavegen.h"
 #include "hardware/pwm.h"
 #include "support.h"
@@ -193,3 +197,5 @@ void wavegen_enable(bool enable)
 // void wavegen_update(void)
 // {
 // }
+
+#endif
