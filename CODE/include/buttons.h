@@ -31,7 +31,15 @@ extern bool y_mode_changed;
 extern float x_offset;
 extern float y_offset;
 extern bool capture_mode;
-extern float capture_buffer[];
+
+typedef enum {
+    WAVE_OFF,
+    WAVE_SINE,
+    WAVE_SAWTOOTH,
+    WAVE_TRIANGLE,
+    WAVE_SQUARE,
+    WAVE_COUNT
+} wave_type;
 
 
 #endif

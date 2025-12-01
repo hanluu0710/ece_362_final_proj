@@ -13,16 +13,17 @@ typedef enum {
     WAVE_COUNT
 } WaveType;
 // Wavefrom generator configuration structure
+
 typedef struct {
-    WaveType;           //Current waveform type
+    WaveType type;           //Current waveform type
     float frequency;    //Frequency in Hz
     float amplitude;    //Amplitude (0v to 3.3v)
     bool enabled;       //Enable/Disable
 } WaveGenConfig;
 
-extern WaveGenCongif wavegen_congfig;
+extern WaveGenConfig wavegen_congfig;
 
-void wavegen_init(pin);
+void wavegen_init(int pwm_pin);
 void wavegen_set_type(WaveType type);
 void wavegen_set_frequency(float freq);
 void wavegen_set_amplitude(float amp);

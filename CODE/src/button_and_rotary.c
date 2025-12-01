@@ -3,13 +3,34 @@
 #include <stdbool.h>
 #include "buttons.h"
 
+void wave_output(wave_type wave) {
+    switch(wave) {
+        case WAVE_OFF:
+            printf("Wave OFF\n");
+            break;
+        case WAVE_SINE:
+            printf("Wave SINE\n");
+            break;
+        case WAVE_SAWTOOTH:
+            printf("Wave SAW\n");
+            break;
+        case WAVE_TRIANGLE:
+            printf("Wave TRIANGLE\n");
+            break;
+        case WAVE_SQUARE:
+            printf("Wave SQUARE\n");
+            break;
+        default:
+            break;
+    }
+}
 
 void init_gpio()
 {
     // Initializing BUTTON_MODE
     gpio_init(BUTTON_MODE);
     gpio_set_dir(BUTTON_MODE, false);
-    gpio_pull_down(BUTTON_CAPTURE); // 1 = pressed, 0 = released
+    gpio_pull_down(BUTTON_MODE); // 1 = pressed, 0 = released
 
     // Initializing BUTTON_CAPTURE
     gpio_init(BUTTON_CAPTURE);
@@ -67,7 +88,7 @@ extern bool grid_dirty;
 
 //Capture
 extern bool pause;
-
+wave_type current_wave = WAVE_OFF;
 void gpio_callback(uint gpio, uint32_t events)
 {
     if (gpio == X_CLK){
@@ -84,6 +105,10 @@ void gpio_callback(uint gpio, uint32_t events)
     else if (gpio == BUTTON_CAPTURE) {
         pause = !pause;
         printf("PAUSE = %d\n", pause);
+    }
+    else if (gpio == BUTTON_MODE){
+        current_wave = (current_wave + 1) % WAVE_COUNT;
+        wave_output(current_wave);
     }
 }
 
@@ -124,6 +149,12 @@ void init_encoders()
         GPIO_IRQ_EDGE_RISE,
         true
     );
+    gpio_set_irq_enabled(
+        BUTTON_MODE,
+        GPIO_IRQ_EDGE_RISE,
+        true
+    );
+
 }
 bool last_x_button = false;
 bool last_y_button = false;
@@ -146,7 +177,6 @@ bool check_mode_button() {
 
     if (!last_state && current_state) {
         last_state = current_state;
-        sleep_ms(100);
         return true;
     }
     last_state = current_state;
@@ -188,9 +218,7 @@ void controls()
     }
 
     // MODE button (wave change)
-    if (check_mode_button()){
-        printf("Mode button pressed\n");
-    }
+
     // CAPTURE button
 
     // X encoder steps

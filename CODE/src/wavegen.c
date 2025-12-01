@@ -1,6 +1,5 @@
-#ifdef ENABLE_WAVEGEN
 // all wavegen code here
-
+#if WAVEGEN
 
 #include "wavegen.h"
 #include "hardware/pwm.h"
@@ -35,14 +34,15 @@ static inline float clampf(float x, float lo, float hi){
 
     return x;
 }
-
+#define N WAVEGEN_TABLE_SIZE
+int wave_table [N];
 static void wavegen_fill_wavetable(WaveType, float amp_volt)
 {
-    float norm_amp = clampf(amp_volt, 0.0f, WAVEGEN_MAX_VOLT);
+    float norm_amp = clampf(amp_volt/WAVEGEN_MAX_VOLT, 0, 1);
     float amp = BASE_AMP * norm_amp;
 
     // if waveform is off, or amp is zero/non-positive, output a flat 0 signal
-    if (type == WAVE_OFF || amp_volt <= 0.0f || norm_amp <= 0.0f){
+    if (type == WAVE_OFF || amp_volt <= 0){
         for (int i = 0; i < N; ++i) {
             wavetable[i] = 0; // zero out all samples
         }
@@ -51,6 +51,7 @@ static void wavegen_fill_wavetable(WaveType, float amp_volt)
 
     //generate one period of the waveform with N samples
     for (int i = 0; i < N; ++i) {// map index i (0~N-1) to a phase in [0, 2pi]
+        float t = (float) i/N;
         float phase = 2.0f * (float)M_PI * (float)i / (float)N; // normalized waveform sample in -1.0~ +1.0
         float s = 0.0f;
 
@@ -58,38 +59,38 @@ static void wavegen_fill_wavetable(WaveType, float amp_volt)
         // chose waveform shape
         switch (type) {
             case WAVE_SINE: // sine wave: -1 to 1
-            s = sinf(phase);
+            s = sinf(2*M_PI*t);
             break;
 
             case WAVE_SAWTOOTH: {//sawtooth wave using a linear ramp from 0 to 1 mapped to -1 to 1 
                 float t = (float)i / (float)N;
-                s = 2.0f * t - 1.0f;
+                s = 2 * t - 1;
                 break;
             }
             case WAVE_TRIANGLE: { //triangle wave built from piecewise linear segments
-                float t = (float)i / (float)N;
-                if (t < 0.25f) //first quarter: ramp up from 0 to ~1
-                s = 4.0f * t;
-                else if (t < 0.74f)
-                s = 2.0f - 4.0f * 1; // middle seg
+                if (t < 0.25) //first quarter: ramp up from 0 to ~1
+                s = 4.0 * t;
+                else if (t < 0.75)
+                s = 2 - 4 * t; // middle seg
                 else
-                s = 4.0f * t - 4.0f; // final seg : ramp from negative region up toward
+                s = 4 * t - 4; // final seg : ramp from negative region up toward
                 break;
             }
             case WAVE_SQUARE: // square wave: +1 for first half, -1 for second half
-            s = (i < N/2) ? 1.0f : -1.0f;
+            s = (i < N/2) ? 1 : -1;
             break;
             default: // unknow type: just ouput 0
-            s = 0.0f;
-            break;
+                s = 0;
         }
 
         // Convert normalized sample s (-1~1) to table value around mid_value
         float v = MID_VALUE + amp * s;
-        if (v < 0.0f)
-        v = 0.0f;
-        if (v > 32767.0f)
-        v = 32767.0f;
+        if (v < 0){
+            v = 0.0f;
+        }
+        if (v > 32767){
+            v = 32767;
+        }
         wavetable[i] = (short int)v; // store as short int in wavetable
     }
 }

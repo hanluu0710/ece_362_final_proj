@@ -11,7 +11,7 @@
 
 
 
-#define BUFFER_SIZE 4096
+#define BUFFER_SIZE 2
 // TFT pins
 #define PIN_SDI    15
 #define PIN_CS     13
@@ -119,8 +119,8 @@ float get_sample(float t) { // SAMPLE SIGNAL
     return 2 * sin(2* 3.14159f *100*t); // 2 Hz wave + 0.25f * sinf(2 * 3.14159f * 10.0f * t) // 10 Hz wave ; }
 }
 void display_mode_message(const char *msg) {
-    LCD_DrawFillRectangle(LCD_W/2-50,5,LCD_W/2+40,19,BACKGROUND);
-    LCD_DrawString(LCD_W/2-20, 5, 0xF800, BACKGROUND, msg, 12, 1);
+    LCD_DrawFillRectangle(LCD_W/2-60,5,LCD_W/2+40,19,BACKGROUND);
+    LCD_DrawString(LCD_W/2-50, 5, 0xF800, BACKGROUND, msg, 12, 1);
 }
 
 #ifdef SINETEST
@@ -222,6 +222,7 @@ void run_oscilloscope() {
     float pixel1[LCD_W]={0};
     float pixel2[LCD_W]={0};
     int pixel_per_volt = 0;
+    int i = 0;
 
     while (1) {
         controls();
@@ -258,22 +259,25 @@ void run_oscilloscope() {
         }
          for (int yy = 20; yy < LCD_H - 20+1; yy++) {
             if ((x % 20 == 0 || yy % 20 == 0)) {
-                LCD_DrawPoint(x+12, yy, GRID_COLOR);
+                LCD_DrawPoint((x)+12, yy, GRID_COLOR);
             }
             else{
-                LCD_DrawPoint(x+12, yy, BACKGROUND);
+                LCD_DrawPoint((x)+12, yy, BACKGROUND);
             }
             if ((yy== 160-y_offset*pixels_per_div)){
-                LCD_DrawPoint(x+12, yy, VIRTUAL_0);
+                LCD_DrawPoint((x)+12, yy, VIRTUAL_0);
             }
         }
         // sample the signal
-        int i = 0;
-        volt1 = adc_get_sample(i);
+
+        volt1 = adc_get_sample(0);
         volt1 = volt1 * (3.3 / 4095.0)-1.65;
-        i++; //t += dt;
-        volt2 = adc_get_sample(i);
+        i = (i)%BUFFER_SIZE; //t += dt;
+        //printf("%d\n",i);
+        volt2 = adc_get_sample(1);
         volt2 = volt2 * (3.3 / 4095.0)-1.65;
+
+        //printf("%d\n", adc_get_sample(0));
 
         // convert to vertical pixel
         pixel1[x] = ((LCD_H) / 2) - volt1 * pixel_per_volt - y_offset*pixels_per_div;
@@ -293,10 +297,9 @@ void run_oscilloscope() {
         }
         // draw line
         old_x = (x==0)? 0:x-1; // %240, always wrap around after reaching end of screen
-        LCD_DrawLine(old_x+12,pixel1[old_x],x+12,pixel2[x],TRACE_COLOR);
-        
+        LCD_DrawLine((old_x)+12,pixel1[old_x],x+12,pixel2[x],TRACE_COLOR);
         x = ((x+1) % (LCD_W)); // %240, always wrap around after reaching end of screen
-        sleep_ms(2);
+        sleep_ms(1);
     }
 }
 #endif

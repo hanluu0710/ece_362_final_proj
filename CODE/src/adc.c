@@ -10,18 +10,19 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // BUFFER_SIZE must be a power of 2. This is the number of samples in the buffer, not bytes
-#define BUFFER_SIZE 4096 //= 32768 bytes / 8; Max size is 16384 samples = 32768 bytes / 2
+#define BUFFER_SIZE 2 //= 32768 bytes / 8; Max size is 16384 samples = 32768 bytes / 2
 uint16_t adc_fifo_out[BUFFER_SIZE] __attribute__((aligned(BUFFER_SIZE * 2)));
 
 //////////////////////////////////////////////////////////////////////////////
 
+/*
 void init_adc_freerun() {
     adc_init();
     adc_gpio_init(47);
-    adc_select_input(0);
+    adc_select_input(7);
     adc_run(true);
 
-}
+}*/
 
 void init_dma() {
     dma_channel_set_read_addr(7, &adc_hw->fifo, false);
@@ -87,12 +88,6 @@ uint16_t adc_get_sample(uint32_t i)
 
     // Convert back to uint16_t pointer and return the sample
     return *(uint16_t *)(base + offset);
-}
-static uint32_t read_index = 0;
-uint16_t adc_get_next_sample() {
-    uint16_t sample = adc_fifo_out[read_index];
-    read_index = (read_index + 1) & (BUFFER_SIZE - 1); // wrap around
-    return sample;
 }
 
 //////////////////////////////////////////////////////////////////////////////
